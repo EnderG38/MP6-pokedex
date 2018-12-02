@@ -1,5 +1,6 @@
 package mp.dex;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    //TODO: add back to open nav drawer setting
+    //TODO: add back to open nav drawer setting (optional/low priority)
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -69,30 +70,55 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(settings);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    //handles selecting options in navigation panel
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_pokemon) {
-
+            openPokemon();
         } else if (id == R.id.nav_moves) {
-
+            openMoves();
         } else if (id == R.id.nav_abilities) {
-
+            openAbilities();
         } else if (id == R.id.nav_meta) {
-
+            openMeta();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    public void openPokemon() {
+        //Intent i = new Intent(MainActivity.this, MainActivity.class);
+        setContentView(R.layout.content_main);
+    }
+    public void openMoves() {
+
+    }
+    public void openAbilities() {
+
+    }
+    public void openMeta() {
+
+    }
+
+    public void changeMode(int mode) {
+        switch(mode) {
+            case 0: {
+
+            }
+            case 1: {
+
+            }
+        }
     }
 }
