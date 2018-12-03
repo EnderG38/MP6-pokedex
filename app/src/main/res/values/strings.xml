@@ -5,5 +5,8 @@
     <string name="nav_header_title">Dex</string>
     <string name="nav_header_subtitle">The better Pokedex</string>
     <string name="nav_header_desc">Navigation header</string>
+
     <string name="action_settings">Settings</string>
+    <string name="back_opens_nav">Back button opens navigation drawer</string>
+    <string name="about_link">About</string>
 </resources>

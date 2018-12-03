@@ -14,8 +14,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final int POKEMON_MODE = 0;
+    private static final int MOVE_MODE = 1;
+    private static final int ABILITY_MODE = 2;
+
+    private static String urlId = "";
+    private static int mode = 0;
+    private static boolean backToOpenNavDrawer = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,8 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (backToOpenNavDrawer && !drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.openDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -84,41 +93,38 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_pokemon) {
-            openPokemon();
+            changeMode(POKEMON_MODE);
         } else if (id == R.id.nav_moves) {
-            openMoves();
+            changeMode(MOVE_MODE);
         } else if (id == R.id.nav_abilities) {
-            openAbilities();
-        } else if (id == R.id.nav_meta) {
+            changeMode(ABILITY_MODE);
+        } /*else if (id == R.id.nav_meta) {
             openMeta();
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public void openPokemon() {
-        //Intent i = new Intent(MainActivity.this, MainActivity.class);
-        setContentView(R.layout.content_main);
-    }
-    public void openMoves() {
 
-    }
-    public void openAbilities() {
-
-    }
-    public void openMeta() {
-
-    }
-
-    public void changeMode(int mode) {
-        switch(mode) {
-            case 0: {
-
+    public void changeMode(int m) {
+        mode = m;
+        switch (m) {
+            case POKEMON_MODE: {
+                break;
             }
-            case 1: {
-
+            case MOVE_MODE: {
+                break;
+            }
+            case ABILITY_MODE: {
+                break;
             }
         }
     }
+
+    /*//update list of Pokemon/moves/abilites/etc.
+    private boolean updateList() {
+
+    }
+    */
 }
