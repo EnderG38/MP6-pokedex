@@ -4,22 +4,21 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <!--TODO: replace icons-->
         <item
             android:id="@+id/nav_pokemon"
             android:icon="@drawable/ic_pokeball_24px"
             android:title="Pokemon" />
         <item
             android:id="@+id/nav_moves"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_baseline_whatshot_24px"
             android:title="Moves" />
         <item
             android:id="@+id/nav_abilities"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_all_inclusive_24px"
             android:title="Abilities" />
         <!--item
             android:id="@+id/nav_meta"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_pokeball_24px"
             android:title="Metagame" /-->
     </group>
 
