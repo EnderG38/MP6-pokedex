@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "lol this is useless", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "This will eventually be a search button", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -62,15 +61,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.openDrawer(GravityCompat.START);
         } else {
             //super.onBackPressed();
-            Contenthandler contenthandler = new Contenthandler();
+
             ImageView a = findViewById(R.id.testImageView);
-
-            //DOES NOT WORK
-            //a.setImageBitmap(contenthandler.getSpritesTest((ImageView) findViewById(R.id.testImageView)));
-            //^THIS DOES NOT WORK
-            //DO NOT USE
-
-            contenthandler.getSpriteTest2(a);
+            Contenthandler.getSpriteTest2(a);
         }
     }
 

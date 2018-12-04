@@ -40,7 +40,7 @@ public class Contenthandler extends AppCompatActivity {
         return bitmap;
     }
 
-    public void getSpriteTest2(final ImageView imageView1) {
-        Picasso.get().load(URL_SPRITE_BASE + "1.png").resize(500, 500).into(imageView1);
+    public static void getSpriteTest2(final ImageView imageView1) {
+        Picasso.get().load(URL_SPRITE_BASE + "1.png").resize(300, 300).into(imageView1);
     }
 }
