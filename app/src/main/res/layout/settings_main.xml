@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,23 +8,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Switch
             android:id="@+id/backNavSwitch"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="@string/back_opens_nav" />
+            android:text="@string/back_opens_nav"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
 
         <TextView
             android:id="@+id/aboutLink"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:clickable="true"
-            android:onClick="onClick"
+            android:drawableStart="@drawable/ic_baseline_info_24px"
+            android:drawablePadding="4dp"
+            android:drawableTint="@android:color/tab_indicator_text"
+            android:gravity="center_vertical"
             android:text="@string/about_link"
-            android:textSize="18sp" />
-
+            android:textSize="16sp" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

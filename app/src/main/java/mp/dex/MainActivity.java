@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int MOVE_MODE = 1;
     private static final int ABILITY_MODE = 2;
 
-    private static String urlId = "";
+    protected static String urlId = "";
     private static int mode = 0;
     private static boolean backToOpenNavDrawer = false;
 
