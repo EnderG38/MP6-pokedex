@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -20,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int MOVE_MODE = 1;
     private static final int ABILITY_MODE = 2;
 
-    protected static String urlId = "";
+    protected static String urlId = ""; //i don't even remember what this is for, but it might end up being used
     private static int mode = 0;
     private static boolean backToOpenNavDrawer = false;
 
@@ -59,7 +61,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (backToOpenNavDrawer && !drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.openDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //super.onBackPressed();
+            Contenthandler contenthandler = new Contenthandler();
+            ImageView a = findViewById(R.id.testImageView);
+
+            //DOES NOT WORK
+            //a.setImageBitmap(contenthandler.getSpritesTest((ImageView) findViewById(R.id.testImageView)));
+            //^THIS DOES NOT WORK
+            //DO NOT USE
+
+            contenthandler.getSpriteTest2(a);
         }
     }
 
@@ -122,7 +133,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    /*//update list of Pokemon/moves/abilites/etc.
+
+    /*//update list of Pokemon/moves/abilities/etc.
     private boolean updateList() {
 
     }
