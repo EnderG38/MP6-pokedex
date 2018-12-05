@@ -96,13 +96,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_pokemon) {
-            changeMode(POKEMON_MODE);
+        switch(id) {
+            case R.id.nav_pokemon:
+                changeMode(POKEMON_MODE);
+                break;
+            case R.id.nav_abilities:
+                changeMode(ABILITY_MODE);
+                break;
+            case R.id.nav_moves:
+                changeMode(MOVE_MODE);
+                break;
+        }
+        /*if (id == R.id.nav_pokemon) {
+            setContentView(R.layout.content_main);
         } else if (id == R.id.nav_moves) {
-            changeMode(MOVE_MODE);
+            setContentView(R.layout.move_search);
         } else if (id == R.id.nav_abilities) {
-            changeMode(ABILITY_MODE);
-        } /*else if (id == R.id.nav_meta) {
+            setContentView(R.layout.ability_search);
+        } else if (id == R.id.nav_meta) {
             openMeta();
         }*/
 
