@@ -8,12 +8,6 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <ImageView
-        android:id="@+id/testImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_baseline_all_inclusive_24px" />
-
     <ScrollView
         android:id="@+id/listParent"
         android:layout_width="match_parent"
