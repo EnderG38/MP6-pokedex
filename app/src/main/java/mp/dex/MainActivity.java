@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.DividerItemDecoration;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,14 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -58,14 +49,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        LinearLayout list = findViewById(R.id.list);
-        //TODO: make a less hacky way of getting the current number of pokemon in existence
-        for (int i = 1; i < (int) '̢'; i++) {
-            //list.addView(getPokemon(i));
-            list.addView(getSprite(i));
-        }
-        //list.
     }
 
     //TODO: add back to open nav drawer setting (optional/low priority)
@@ -79,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             //super.onBackPressed();
 
-            ImageView a = findViewById(R.id.testImageView);
-            Contenthandler.getSpriteTest(a);
+            //ImageView a = findViewById(R.id.testImageView);
+            //Contenthandler.getSpriteTest2(a);
         }
     }
 
@@ -143,35 +126,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private TextView getPokemon(final int id) {
-        final TextView ret = new TextView(this);
-        String url = Contenthandler.URL_BASE + id;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        String str = "test #" + id;
-                        ret.setText(str);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                String str = "Error! id: " + id;
-                ret.setText(str);
-            }
-        });
-        ret.setHeight(64);
-        ret.setTextSize(12);
-        return ret;
+    public void onClick(View v) {
+        final int id = v.getId();
+        switch(id) {
+            case R.id.pokemon_switch_view:
+                //Navigate to Pokemon Detail Page
+                Intent intent = new Intent(MainActivity.this, PokemonDetailActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
-
-    private ImageView getSprite(int id) {
-        ImageView ret = new ImageView(this);
-        ret.setForegroundGravity(GravityCompat.START);
-        Picasso.get().load(Contenthandler.URL_SPRITE_BASE + id +".png").resize(150, 150).into(ret);
-        return ret;
-    }
-
 
     /*//update list of Pokemon/moves/abilities/etc.
     private boolean updateList() {
