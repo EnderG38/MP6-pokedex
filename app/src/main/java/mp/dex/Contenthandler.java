@@ -11,13 +11,11 @@ import com.android.volley.toolbox.ImageRequest;
 
 //this class handles the json grabbing and parsing.
 public class Contenthandler extends AppCompatActivity {
-    private static String urlAppend;
     private static final String URL_BASE = "https://pokeapi.co/api/v2/";
     private static final String URL_SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
-    private static RequestQueue requestQueue;
     protected static Bitmap bitmap = null;
 
-    //TODO: remove Volley from everywhere
+    //TODO: phase out this class
     public Bitmap getSpritesTest(final ImageView imageView) {
         final String url = URL_SPRITE_BASE + "1.png";
         final ImageRequest imageRequest = new ImageRequest(url,

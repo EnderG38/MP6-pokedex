@@ -13,17 +13,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
+//TODO: implement SharedPreferences somewhere so the one setting we have is kept after app close
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static String urlAppendage = "pokemon/";
+    private static final String URL_BASE = "https://pokeapi.co/api/v2/";
+    private static final String URL_SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
     private static final int POKEMON_MODE = 0;
     private static final int MOVE_MODE = 1;
     private static final int ABILITY_MODE = 2;
 
-    protected static String urlId = ""; //i don't even remember what this is for, but it might end up being used
-    private static int mode = 0;
-    private static boolean backToOpenNavDrawer = false;
+    protected static boolean backToOpenNavDrawer = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (backToOpenNavDrawer && !drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.openDrawer(GravityCompat.START);
         } else {
-            //super.onBackPressed();
-
-            //ImageView a = findViewById(R.id.testImageView);
-            //Contenthandler.getSpriteTest2(a);
+            super.onBackPressed();
         }
     }
 
@@ -123,18 +122,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void changeMode(int m) {
-        mode = m;
         switch (m) {
             case POKEMON_MODE: {
-                break;
-            }
-            case MOVE_MODE: {
+                urlAppendage = "pokemon/";
+                updatePokemon();
                 break;
             }
             case ABILITY_MODE: {
+                urlAppendage = "abilities/";
+                updateAbilities();
+                break;
+            }
+            case MOVE_MODE: {
+                urlAppendage = "moves/";
+                updateMoves();
                 break;
             }
         }
+    }
+
+
+
+    private void updatePokemon() {
+
+    }
+
+    private void updateAbilities() {
+
+    }
+
+    private void updateMoves() {
+
     }
 
     public void onClick(View v) {
