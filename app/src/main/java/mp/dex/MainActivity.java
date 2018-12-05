@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     protected static String urlId = ""; //i don't even remember what this is for, but it might end up being used
     private static int mode = 0;
-    private static boolean backToOpenNavDrawer = false;
+    protected static boolean backToOpenNavDrawer = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
