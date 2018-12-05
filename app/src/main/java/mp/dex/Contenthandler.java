@@ -1,7 +1,5 @@
 package mp.dex;
 
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,6 +8,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.squareup.picasso.Picasso;
 import com.android.volley.*;
 
+//TODO: stop using this class, just make methods in MainActivity
 //this class handles the json grabbing and parsing.
 public class Contenthandler extends AppCompatActivity {
     protected static final String URL_BASE = "https://pokeapi.co/api/v2/";
