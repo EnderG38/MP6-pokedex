@@ -29,6 +29,8 @@
         </activity>
         <activity android:name=".AboutActivity"
             android:label="@string/about_link"/>
+        <activity android:name=".PokemonDetailActivity"
+            android:label="Pikachu"/>
     </application>
 
 </manifest>

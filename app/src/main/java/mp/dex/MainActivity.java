@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             //super.onBackPressed();
 
-            ImageView a = findViewById(R.id.testImageView);
-            Contenthandler.getSpriteTest2(a);
+            //ImageView a = findViewById(R.id.testImageView);
+            //Contenthandler.getSpriteTest2(a);
         }
     }
 
@@ -126,6 +126,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void onClick(View v) {
+        final int id = v.getId();
+        switch(id) {
+            case R.id.pokemon_switch_view:
+                //Navigate to Pokemon Detail Page
+                Intent intent = new Intent(MainActivity.this, PokemonDetailActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
 
     /*//update list of Pokemon/moves/abilities/etc.
     private boolean updateList() {
