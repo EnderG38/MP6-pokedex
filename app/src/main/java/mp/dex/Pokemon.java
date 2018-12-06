@@ -35,9 +35,15 @@ public class Pokemon {
     //The weight of the Pokemon in hectograms
     private int weight;
     Pokemon(final int id) {
-
+        Integer urlId = new Integer(id);
+        String url = String.format("https://pokeapi.co/api/v2/%s", urlId.toString());
+        createPokemonObject(url);
     }
     Pokemon(final String name) {
+        String url = String.format("https://pokeapi.co/api/v2/%s", name);
+        createPokemonObject(url);
+    }
+    private void createPokemonObject(final String urlBase) {
 
     }
     public Ability[] getAbilities() {return abilities;}
