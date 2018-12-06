@@ -14,6 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //TODO: implement SharedPreferences somewhere so the one setting we have is kept after app close
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -21,9 +24,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String URL_BASE = "https://pokeapi.co/api/v2/";
     private static final String URL_SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
+    private static List<Pokemon> pokemonList;
+
     private static final int POKEMON_MODE = 0;
     private static final int MOVE_MODE = 1;
     private static final int ABILITY_MODE = 2;
+    private static final int FIRST_ID = 1;
+    private static final int LAST_ID = 802;
+    private static final int FIRST_ALTERNATE_ID = 10001;
+    private static final int LAST_ALTERNATE_ID = 10147;
 
     protected static boolean backToOpenNavDrawer = false;
 
@@ -51,6 +60,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //Instantiate the full list of Pokemon.
+        pokemonList = new ArrayList<Pokemon>();
+        for (int id = FIRST_ID; id <= LAST_ID; id++) {
+            pokemonList.add(new Pokemon(id));
+            //Adds alternate forms to the list as well.
+            if (id == LAST_ID) {
+                for (id = FIRST_ALTERNATE_ID; id <= LAST_ALTERNATE_ID; id++) {
+                    pokemonList.add(new Pokemon(id));
+                }
+            }
+        }
     }
 
     //TODO: add back to open nav drawer setting (optional/low priority)
