@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //Instantiate the full list of Pokemon.
-        pokemonList = new ArrayList<Pokemon>();
+        /*pokemonList = new ArrayList<Pokemon>();
         for (int id = FIRST_ID; id <= LAST_ID; id++) {
             pokemonList.add(new Pokemon(id));
             //Adds alternate forms to the list as well.
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     pokemonList.add(new Pokemon(id));
                 }
             }
-        }
+        }*/
     }
 
     //TODO: add back to open nav drawer setting (optional/low priority)
