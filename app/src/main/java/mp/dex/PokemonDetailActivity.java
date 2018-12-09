@@ -6,6 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 public class PokemonDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pokemon_pikachu_page);
+        setContentView(R.layout.pokemon_detail_page);
     }
 }
