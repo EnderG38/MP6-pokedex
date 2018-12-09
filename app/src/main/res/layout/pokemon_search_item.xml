@@ -46,6 +46,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/pokemon_type_1"
                 android:layout_width="60dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
@@ -53,7 +54,7 @@
                 app:srcCompat="@drawable/test_electric_icon" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/pokemon_type_2"
                 android:layout_width="60dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
