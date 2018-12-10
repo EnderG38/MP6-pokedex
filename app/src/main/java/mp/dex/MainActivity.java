@@ -183,9 +183,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //TODO replace Pikachu info with placeholder/default values
     private void updatePokemon() {
         searchList.removeAllViews();
-        JsonParser parser = new JsonParser();
         for (int i = FIRST_ID; i <= LAST_ID; i++) {
             LinearLayout obj = findViewById(R.id.pokemon_switch_view);
+            JsonParser parser = new JsonParser();
             JsonObject pokemon = parser.parse(retrieveData("" + i)).getAsJsonObject();
             String name = formatString(pokemon.get("name").getAsString());
             //Exceptions for Ho-oh, Porygon-Z, and Jangmo-O line
