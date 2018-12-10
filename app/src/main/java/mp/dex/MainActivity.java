@@ -242,18 +242,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             try {
                 retrieveData("" + i);
                 pokemonName = formatString(searchData.getString("name"));
+                //Exceptions for the 5 Pokemon with hyphens in their name cause they're stupid.
                 if (i == 250 || i == 474 || i == 782 || i == 783 || i == 784) {
                     pokemonName = pokemonName.replace(' ', '-');
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //JsonArray forms = pokemon.getAsJsonArray("forms");
-            //JsonObject form = (JsonObject) forms.get(0);
-            //String name = formatString(form.get("name").getAsString());
-            //Exceptions for Ho-oh, Porygon-Z, and Jangmo-O line
-            //
-            //JsonArray types = pokemon.get("types").getAsJsonArray();
 
             //these beautiful blocks of code set the layout and constraints and shit
             //It's a lot but damn is this cool
