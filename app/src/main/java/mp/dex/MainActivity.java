@@ -185,6 +185,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (int i = FIRST_ID; i <= LAST_ID; i++) {
             LinearLayout obj = new LinearLayout(this);
             obj.setGravity(Gravity.CENTER_VERTICAL);
+            obj.setClickable(true);
+
             JsonParser parser = new JsonParser();
             JsonNull pokemon = (JsonNull) parser.parse(retrieveData("" + i));
             //JsonArray forms = pokemon.getAsJsonArray("forms");
@@ -198,11 +200,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             ImageView setSprite = new ImageView(this);
             Picasso.get().load(URL_SPRITE_BASE + i + ".png").into(setSprite);
-            //setSprite.
+            setSprite.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
+
             TextView setDexNumber = new TextView(this);
-            setDexNumber.setText("" + i);
+            setDexNumber.setText("#" + i);
+            setDexNumber.setPadding(10, 0, 10, 0);
+
             TextView setName = new TextView(this);
             setName.setText("name");
+            setName.setPadding(15, 0, 15, 0);
 
             obj.addView(setSprite);
             obj.addView(setDexNumber);
