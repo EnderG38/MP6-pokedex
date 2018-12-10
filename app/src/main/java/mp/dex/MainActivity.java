@@ -2,10 +2,8 @@ package mp.dex;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,19 +13,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonParser;
+import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 //TODO: implement SharedPreferences somewhere so the one setting we have is kept after app close
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -55,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //TODO: make search work, then add this. or maybe just make search bar hiding work
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,23 +178,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String st = new String(ch);
         return st;
     }
-    //TODO replace Pikachu info with placeholder/default values
+
+    //TODO: replace Pikachu info with placeholder/default values
     private void updatePokemon() {
         searchList.removeAllViews();
         for (int i = FIRST_ID; i <= LAST_ID; i++) {
-            LinearLayout obj = findViewById(R.id.pokemon_switch_view);
+            LinearLayout obj = new LinearLayout(this);
+            obj.setGravity(Gravity.CENTER_VERTICAL);
             JsonParser parser = new JsonParser();
-            JsonObject pokemon = parser.parse(retrieveData("" + i)).getAsJsonObject();
-            String name = formatString(pokemon.get("name").getAsString());
+            JsonNull pokemon = (JsonNull) parser.parse(retrieveData("" + i));
+            //JsonArray forms = pokemon.getAsJsonArray("forms");
+            //JsonObject form = (JsonObject) forms.get(0);
+            //String name = formatString(form.get("name").getAsString());
             //Exceptions for Ho-oh, Porygon-Z, and Jangmo-O line
             if (i == 250 || i == 474 || i == 782 || i == 783 || i == 784) {
-                name = name.replace(' ', '-');
+                //name = name.replace(' ', '-');
             }
-            JsonArray types = pokemon.get("types").getAsJsonArray();
-            TextView setName = (TextView) obj.findViewById(R.id.pokemon_search_name);
-            setName.setText(name);
-            TextView setDexNumber = (TextView) obj.findViewById(R.id.pokemon_search_dex);
+            //JsonArray types = pokemon.get("types").getAsJsonArray();
+
+            ImageView setSprite = new ImageView(this);
+            Picasso.get().load(URL_SPRITE_BASE + i + ".png").into(setSprite);
+            //setSprite.
+            TextView setDexNumber = new TextView(this);
             setDexNumber.setText("" + i);
+            TextView setName = new TextView(this);
+            setName.setText("name");
+
+            obj.addView(setSprite);
+            obj.addView(setDexNumber);
+            obj.addView(setName);
+
             searchList.addView(obj);
         }
     }
@@ -208,33 +219,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void updateMoves() {
 
     }
-    private static String retrieveData(String id) {
+
+    //this is disgusting but idk if there is a better way
+    //basically I just made retrrieveData work on a new Thread since it's not allowed on the main one
+    private static String retrieveData(final String id) {
         Log.w("This is the Id", id);
-        StringBuilder stringBuilder = new StringBuilder("");
-        try {
-            URL url = new URL(URL_BASE + urlAppendage + id + "/");
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            try {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line).append("\n");
+        final StringBuilder stringBuilder = new StringBuilder("");
+        Thread thread =  new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    try {
+                        URL url = new URL(URL_BASE + urlAppendage + id + "/");
+                        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                        try {
+                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                            String line;
+                            while ((line = bufferedReader.readLine()) != null) {
+                                stringBuilder.append(line).append("\n");
+                            }
+                            bufferedReader.close();
+                        }
+                        finally{
+                            urlConnection.disconnect();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println(e.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                bufferedReader.close();
             }
-            finally{
-                urlConnection.disconnect();
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        });
         return stringBuilder.toString();
     }
 
     public void onClick(View v) {
         final int id = v.getId();
         switch(id) {
-            case R.id.pokemon_switch_view:
+            case R.id.pokemon_search_item:
                 //Navigate to Pokemon Detail Page
                 Intent intent = new Intent(MainActivity.this, PokemonDetailActivity.class);
                 startActivity(intent);
