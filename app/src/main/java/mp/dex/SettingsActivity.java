@@ -1,6 +1,7 @@
 package mp.dex;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,6 +10,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 public class SettingsActivity extends AppCompatActivity {
+    protected static final String PREFS = "settings";
+    protected static final String BACK_NAV = "backNav";
+    SharedPreferences settings;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_main);
@@ -31,7 +36,15 @@ public class SettingsActivity extends AppCompatActivity {
                 } else {
                     MainActivity.backToOpenNavDrawer = false;
                 }
+                setPref(BACK_NAV, MainActivity.backToOpenNavDrawer);
             }
         });
+    }
+
+    public void setPref(String key, boolean pref) {
+        settings = getSharedPreferences(PREFS, 0);
+        SharedPreferences.Editor settingsEditor = settings.edit();
+        settingsEditor.putBoolean(key, pref);
+        settingsEditor.apply();
     }
 }

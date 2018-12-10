@@ -1,6 +1,7 @@
 package mp.dex;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.util.Log;
@@ -27,7 +28,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-//TODO: implement SharedPreferences somewhere so the one setting we have is kept after app close
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static String urlAppendage = "pokemon/";
@@ -72,11 +72,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        SharedPreferences sp = getSharedPreferences(SettingsActivity.PREFS, 0);
+        backToOpenNavDrawer = sp.getBoolean(SettingsActivity.BACK_NAV, false);
+
         searchList = findViewById(R.id.pokemon_search_list);
         updatePokemon();
     }
 
-    //TODO: add back to open nav drawer setting (optional/low priority)
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -241,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //this is disgusting but idk if there is a better way
-    //basically I just made retrrieveData work on a new Thread since it's not allowed on the main one
+    //it's better to multithread, though. i'm pretty sure this hasn't caused any problems, since the errors haven't changed
     private static String retrieveData(final String id) {
         Log.w("This is the Id", id);
         final StringBuilder stringBuilder = new StringBuilder("");
@@ -285,10 +287,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
     }
-
-    /*//update list of Pokemon/moves/abilities/etc.
-    private boolean updateList() {
-
-    }
-    */
 }
