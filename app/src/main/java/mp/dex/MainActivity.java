@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,15 +56,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        final EditText searchbar = findViewById(R.id.pokemon_search_box);
+        searchbar.setVisibility(View.GONE);
+
         //TODO: make search work, then add this. or maybe just make search bar hiding work
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "This will eventually be a search button", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Snackbar.make(view, "This will eventually be a search button", Snackbar.LENGTH_LONG)
+                        //.setAction("Action", null).show();
+                if (searchbar.getVisibility() == View.GONE) {
+                    searchbar.setVisibility(View.VISIBLE);
+                    fab.setImageResource(R.drawable.ic_baseline_clear_24px);
+                } else {
+                    searchbar.setVisibility(View.GONE);
+                    fab.setImageResource(R.drawable.ic_baseline_search_24px);
+                }
             }
-        });*/
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -242,20 +255,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         searchList.removeAllViews();
     }
 
+    //it does need to be on a separate thread
     private static String retrieveData(final String id) {
         Log.w("This is the Id", id);
         final StringBuilder stringBuilder = new StringBuilder("");
-        /*Thread thread =  new Thread(new Runnable() {
+        Thread thread =  new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                   //process goes here
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
-        try {
+                   try {
+                       Log.d("attempting connection", id);
             URL url = new URL(URL_BASE + urlAppendage + id + "/");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             try {
@@ -273,6 +282,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        //thread.start();
         return stringBuilder.toString();
     }
 
