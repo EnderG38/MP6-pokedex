@@ -47,8 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String URL_BASE = "https://pokeapi.co/api/v2/";
     private static final String URL_SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
-    private static Context mContext;
-    private static LinearLayout searchList;
+    private LinearLayout searchList;
     private static JSONObject searchData;
     private static RequestQueue requestQueue;
 
@@ -107,8 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences sp = getSharedPreferences(SettingsActivity.PREFS, 0);
         backToOpenNavDrawer = sp.getBoolean(SettingsActivity.BACK_NAV, false);
 
-        mContext = getApplicationContext();
-        requestQueue = Volley.newRequestQueue(mContext);
+        requestQueue = Volley.newRequestQueue(this);
 
         searchList = findViewById(R.id.pokemon_search_list);
         updatePokemon();
@@ -239,18 +237,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //here's the actual JSON stuff
             //TODO: make the JSON stuff actually work
             String pokemonName = "name";
+            final String id = String.valueOf(i);
             try {
-                retrieveData("" + i);
+                retrieveData(id);
                 pokemonName = formatString(searchData.getString("name"));
-                //Exceptions for the 5 Pokemon with hyphens in their name cause they're stupid.
-                if (i == 250 || i == 474 || i == 782 || i == 783 || i == 784) {
-                    pokemonName = pokemonName.replace(' ', '-');
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            //Exceptions for the 5 Pokemon with hyphens in their name.
+            if (i == 250 || i == 474 || i == 782 || i == 783 || i == 784) {
+                pokemonName = pokemonName.replace(' ', '-');
+            }
 
-            //these beautiful blocks of code set the layout and constraints and shit
+            //these beautiful blocks of code set the layout and constraints
             //It's a lot but damn is this cool
             ImageView setSprite = new ImageView(this);
             Picasso.get().load(URL_SPRITE_BASE + i + ".png").into(setSprite);
@@ -282,57 +281,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //it does need to be on a separate thread
     private static void retrieveData(final String id) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                URL_BASE + urlAppendage + id + "/",
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Received JSON for id", id);
-                        searchData = response;
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(final VolleyError error) {
-                        error.printStackTrace();
-                    }
+        //Request appears to not be happening at all
+        try {
+            String url = URL_BASE + urlAppendage + id + "/";
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    url,
+                    null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(final JSONObject response) {
+                            searchData = response;
+                            Log.d("Received JSON for id", id);
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(final VolleyError error) {
+                    error.printStackTrace();
                 }
-        );
-        requestQueue.add(jsonObjectRequest);
-        //Parsing JSON with GSON, appears to not work.
-        /*Log.w("This is the Id", id);
-        final StringBuilder stringBuilder = new StringBuilder("");
-        Thread thread =  new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                   try {
-                       Log.d("attempting connection", id);
-            URL url = new URL(URL_BASE + urlAppendage + id + "/");
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            try {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line).append("\n");
-                }
-                bufferedReader.close();
             }
-            finally{
-                urlConnection.disconnect();
-            }
+            );
+            requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        //thread.start();
-        return stringBuilder.toString();*/
     }
 
     public void onClick(View v) {
