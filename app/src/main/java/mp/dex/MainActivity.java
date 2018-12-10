@@ -23,9 +23,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -38,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String URL_BASE = "https://pokeapi.co/api/v2/";
     private static final String URL_SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
+    private static Context mContext;
     private static LinearLayout searchList;
 
     private static final int POKEMON_MODE = 0;
@@ -94,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         SharedPreferences sp = getSharedPreferences(SettingsActivity.PREFS, 0);
         backToOpenNavDrawer = sp.getBoolean(SettingsActivity.BACK_NAV, false);
+
+        mContext = getApplicationContext();
 
         searchList = findViewById(R.id.pokemon_search_list);
         updatePokemon();
@@ -202,13 +213,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return st;
     }
 
+    private static JSONObject searchData;
+
     //TODO: remove hardcoded pikachu info
     private void updatePokemon() {
         //the king is dead
         searchList.removeAllViews();
         //long live the king
 
-        for (int i = FIRST_ID; i <= LAST_ID; i++) {
+        for (int i = FIRST_ID; i <= 10; i++) {
             //new everything is required because using existing layouts/etc makes Android unhappy
             //basically you can't add something to a view if it already has a parent
             //and the existing things all had the LinearLayout as a parent
@@ -221,15 +234,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             //here's the actual JSON stuff
             //TODO: make the JSON stuff actually work
-            JsonParser parser = new JsonParser();
-            JsonNull pokemon = (JsonNull) parser.parse(retrieveData("" + i)); //this always gets a null JsonObject so only JsonNull lets the program run
+            String pokemonName = "name";
+            try {
+                retrieveData("" + i);
+                pokemonName = formatString(searchData.getString("name"));
+                if (i == 250 || i == 474 || i == 782 || i == 783 || i == 784) {
+                    pokemonName = pokemonName.replace(' ', '-');
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             //JsonArray forms = pokemon.getAsJsonArray("forms");
             //JsonObject form = (JsonObject) forms.get(0);
             //String name = formatString(form.get("name").getAsString());
             //Exceptions for Ho-oh, Porygon-Z, and Jangmo-O line
-            if (i == 250 || i == 474 || i == 782 || i == 783 || i == 784) {
-                //name = name.replace(' ', '-');
-            }
+            //
             //JsonArray types = pokemon.get("types").getAsJsonArray();
 
             //these beautiful blocks of code set the layout and constraints and shit
@@ -243,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setDexNumber.setPadding(10, 0, 10, 0);
 
             TextView setName = new TextView(this);
-            setName.setText("name");
+            setName.setText(pokemonName);
             setName.setPadding(15, 0, 15, 0);
 
             pokemonList.addView(setSprite);
@@ -263,8 +282,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //it does need to be on a separate thread
-    private static String retrieveData(final String id) {
-        Log.w("This is the Id", id);
+    private static void retrieveData(final String id) {
+        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                URL_BASE + urlAppendage + id + "/",
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Received JSON for id", id);
+                        searchData = response;
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(final VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
+        );
+        requestQueue.add(jsonObjectRequest);
+        //Parsing JSON with GSON, appears to not work.
+        /*Log.w("This is the Id", id);
         final StringBuilder stringBuilder = new StringBuilder("");
         Thread thread =  new Thread(new Runnable() {
             @Override
@@ -295,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         //thread.start();
-        return stringBuilder.toString();
+        return stringBuilder.toString();*/
     }
 
     public void onClick(View v) {
