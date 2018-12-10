@@ -13,10 +13,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String URL_BASE = "https://pokeapi.co/api/v2/";
     private static final String URL_SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
-    private static List<Pokemon> pokemonList;
+    private static LinearLayout searchList;
 
     private static final int POKEMON_MODE = 0;
     private static final int MOVE_MODE = 1;
@@ -64,17 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Instantiate the full list of Pokemon.
-        /*pokemonList = new ArrayList<Pokemon>();
-        for (int id = FIRST_ID; id <= LAST_ID; id++) {
-            pokemonList.add(new Pokemon(id));
-            //Adds alternate forms to the list as well.
-            if (id == LAST_ID) {
-                for (id = FIRST_ALTERNATE_ID; id <= LAST_ALTERNATE_ID; id++) {
-                    pokemonList.add(new Pokemon(id));
-                }
-            }
-        }*/
+        searchList = findViewById(R.id.pokemon_search_list);
 
     }
 
@@ -150,17 +145,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (m) {
             case POKEMON_MODE: {
                 urlAppendage = "pokemon/";
-                updatePokemon();
+                updatePokemon(searchList);
                 break;
             }
             case ABILITY_MODE: {
                 urlAppendage = "abilities/";
-                updateAbilities();
+                updateAbilities(searchList);
                 break;
             }
             case MOVE_MODE: {
                 urlAppendage = "moves/";
-                updateMoves();
+                updateMoves(searchList);
                 break;
             }
         }
@@ -182,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // If apart from first character
             // Any one is in Upper-case
             else if (ch[i] >= 'A' && ch[i] <= 'Z')
-
                 // Convert into Lower-Case
                 ch[i] = (char)(ch[i] + 'a' - 'A');
         }
@@ -191,16 +185,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return st;
     }
 
-    private void updatePokemon() {
+    private void updatePokemon(LinearLayout list) {
 
     }
 
-    private void updateAbilities() {
+    private void updateAbilities(LinearLayout list) {
 
     }
 
-    private void updateMoves() {
+    private void updateMoves(LinearLayout list) {
 
+    }
+    private static String retrieveData(String id) {
+        try {
+            URL url = new URL(URL_BASE + urlAppendage + id + "/");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line).append("\n");
+                }
+                bufferedReader.close();
+                return stringBuilder.toString();
+            }
+            finally{
+                urlConnection.disconnect();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     public void onClick(View v) {
