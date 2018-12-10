@@ -242,38 +242,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         searchList.removeAllViews();
     }
 
-    //this is disgusting but idk if there is a better way
-    //it's better to multithread, though. i'm pretty sure this hasn't caused any problems, since the errors haven't changed
     private static String retrieveData(final String id) {
         Log.w("This is the Id", id);
         final StringBuilder stringBuilder = new StringBuilder("");
-        Thread thread =  new Thread(new Runnable() {
+        /*Thread thread =  new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    try {
-                        URL url = new URL(URL_BASE + urlAppendage + id + "/");
-                        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                        try {
-                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                            String line;
-                            while ((line = bufferedReader.readLine()) != null) {
-                                stringBuilder.append(line).append("\n");
-                            }
-                            bufferedReader.close();
-                        }
-                        finally{
-                            urlConnection.disconnect();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.out.println(e.getMessage());
-                    }
+                   //process goes here
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        });
+        });*/
+        try {
+            URL url = new URL(URL_BASE + urlAppendage + id + "/");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line).append("\n");
+                }
+                bufferedReader.close();
+            }
+            finally{
+                urlConnection.disconnect();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
         return stringBuilder.toString();
     }
 
