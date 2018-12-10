@@ -33,6 +33,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static Context mContext;
     private static LinearLayout searchList;
+    private static JSONObject searchData;
+    private static RequestQueue requestQueue;
 
     private static final int POKEMON_MODE = 0;
     private static final int MOVE_MODE = 1;
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         backToOpenNavDrawer = sp.getBoolean(SettingsActivity.BACK_NAV, false);
 
         mContext = getApplicationContext();
+        requestQueue = Volley.newRequestQueue(mContext);
 
         searchList = findViewById(R.id.pokemon_search_list);
         updatePokemon();
@@ -213,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return st;
     }
 
-    private static JSONObject searchData;
+    private static String pokemonName;
 
     //TODO: remove hardcoded pikachu info
     private void updatePokemon() {
@@ -283,7 +287,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //it does need to be on a separate thread
     private static void retrieveData(final String id) {
-        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 URL_BASE + urlAppendage + id + "/",
