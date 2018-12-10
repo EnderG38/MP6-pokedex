@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +16,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         searchList = findViewById(R.id.pokemon_search_list);
-
+        updatePokemon();
     }
 
     //TODO: add back to open nav drawer setting (optional/low priority)
@@ -126,15 +130,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 changeMode(MOVE_MODE);
                 break;
         }
-        /*if (id == R.id.nav_pokemon) {
-            setContentView(R.layout.content_main);
-        } else if (id == R.id.nav_moves) {
-            setContentView(R.layout.move_search);
-        } else if (id == R.id.nav_abilities) {
-            setContentView(R.layout.ability_search);
-        } else if (id == R.id.nav_meta) {
-            openMeta();
-        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -145,24 +140,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (m) {
             case POKEMON_MODE: {
                 urlAppendage = "pokemon/";
-                updatePokemon(searchList);
+                updatePokemon();
                 break;
             }
             case ABILITY_MODE: {
                 urlAppendage = "abilities/";
-                updateAbilities(searchList);
+                updateAbilities();
                 break;
             }
             case MOVE_MODE: {
                 urlAppendage = "moves/";
-                updateMoves(searchList);
+                updateMoves();
                 break;
             }
         }
     }
-
+    //Method to convert Json strings to usable UI elements
     public static String formatString(String str) {
         // Create a char array of given String
+        str = str.replace('-', ' ');
         char ch[] = str.toCharArray();
         for (int i = 0; i < str.length(); i++) {
             // If first character of a word is found
@@ -184,31 +180,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String st = new String(ch);
         return st;
     }
+    //TODO replace Pikachu info with placeholder/default values
+    private void updatePokemon() {
+        searchList.removeAllViews();
+        JsonParser parser = new JsonParser();
+        for (int i = FIRST_ID; i <= LAST_ID; i++) {
+            LinearLayout obj = findViewById(R.id.pokemon_switch_view);
+            JsonObject pokemon = parser.parse(retrieveData("" + i)).getAsJsonObject();
+            String name = formatString(pokemon.get("name").getAsString());
+            //Exceptions for Ho-oh, Porygon-Z, and Jangmo-O line
+            if (i == 250 || i == 474 || i == 782 || i == 783 || i == 784) {
+                name = name.replace(' ', '-');
+            }
+            JsonArray types = pokemon.get("types").getAsJsonArray();
+            TextView setName = (TextView) obj.findViewById(R.id.pokemon_search_name);
+            setName.setText(name);
+            searchList.addView(obj);
+        }
+    }
 
-    private void updatePokemon(LinearLayout list) {
+    private void updateAbilities() {
 
     }
 
-    private void updateAbilities(LinearLayout list) {
-
-    }
-
-    private void updateMoves(LinearLayout list) {
+    private void updateMoves() {
 
     }
     private static String retrieveData(String id) {
+        Log.w("This is the Id", id);
+        StringBuilder stringBuilder = new StringBuilder("");
         try {
             URL url = new URL(URL_BASE + urlAppendage + id + "/");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                StringBuilder stringBuilder = new StringBuilder();
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
                     stringBuilder.append(line).append("\n");
                 }
                 bufferedReader.close();
-                return stringBuilder.toString();
             }
             finally{
                 urlConnection.disconnect();
@@ -216,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return null;
+        return stringBuilder.toString();
     }
 
     public void onClick(View v) {

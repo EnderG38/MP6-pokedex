@@ -19,21 +19,21 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/pokemon_search_image"
+            android:id="@+id/pokemon_search_sprite"
             android:layout_width="35dp"
             android:layout_height="80dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/test_pikachu" />
 
         <TextView
-            android:id="@+id/pokemon_search_dex_test"
+            android:id="@+id/pokemon_search_dex"
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_weight="1"
-            android:text="025" />
+            android:text="25" />
 
         <TextView
-            android:id="@+id/pokemon_search_name_test"
+            android:id="@+id/pokemon_search_name"
             android:layout_width="60dp"
             android:layout_height="20dp"
             android:layout_weight="1"
