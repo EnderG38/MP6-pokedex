@@ -195,6 +195,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             JsonArray types = pokemon.get("types").getAsJsonArray();
             TextView setName = (TextView) obj.findViewById(R.id.pokemon_search_name);
             setName.setText(name);
+            TextView setDexNumber = (TextView) obj.findViewById(R.id.pokemon_search_dex);
+            setDexNumber.setText("" + i);
             searchList.addView(obj);
         }
     }
