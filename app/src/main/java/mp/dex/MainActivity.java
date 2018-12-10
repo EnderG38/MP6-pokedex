@@ -2,6 +2,7 @@ package mp.dex;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -181,14 +182,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //TODO: replace Pikachu info with placeholder/default values
     private void updatePokemon() {
+        //the king is dead
         searchList.removeAllViews();
-        for (int i = FIRST_ID; i <= LAST_ID; i++) {
-            LinearLayout obj = new LinearLayout(this);
-            obj.setGravity(Gravity.CENTER_VERTICAL);
-            obj.setClickable(true);
+        //long live the king
 
+        for (int i = FIRST_ID; i <= LAST_ID; i++) {
+            //new everything is required because using existing layouts/etc makes Android unhappy
+            //basically you can't add something to a view if it already has a parent
+            //and the existing things all had the LinearLayout as a parent
+            //so basically we need to make the search item layout from scratch. programmatically. fun.
+            ConstraintLayout constraintLayout = new ConstraintLayout(this);
+            LinearLayout pokemonList = new LinearLayout(this);
+            pokemonList.setGravity(Gravity.CENTER_VERTICAL);
+            pokemonList.setClickable(true);
+            constraintLayout.addView(pokemonList);
+
+            //here's the actual JSON stuff
+            //TODO: make the JSON stuff actually work
             JsonParser parser = new JsonParser();
-            JsonNull pokemon = (JsonNull) parser.parse(retrieveData("" + i));
+            JsonNull pokemon = (JsonNull) parser.parse(retrieveData("" + i)); //this always gets a null JsonObject so only JsonNull lets the program run
             //JsonArray forms = pokemon.getAsJsonArray("forms");
             //JsonObject form = (JsonObject) forms.get(0);
             //String name = formatString(form.get("name").getAsString());
@@ -198,6 +210,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             //JsonArray types = pokemon.get("types").getAsJsonArray();
 
+            //these beautiful blocks of code set the layout and constraints and shit
+            //It's a lot but damn is this cool
             ImageView setSprite = new ImageView(this);
             Picasso.get().load(URL_SPRITE_BASE + i + ".png").into(setSprite);
             setSprite.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
@@ -210,20 +224,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setName.setText("name");
             setName.setPadding(15, 0, 15, 0);
 
-            obj.addView(setSprite);
-            obj.addView(setDexNumber);
-            obj.addView(setName);
+            pokemonList.addView(setSprite);
+            pokemonList.addView(setDexNumber);
+            pokemonList.addView(setName);
 
-            searchList.addView(obj);
+            searchList.addView(constraintLayout);
         }
     }
 
     private void updateAbilities() {
-
+        searchList.removeAllViews();
     }
 
     private void updateMoves() {
-
+        searchList.removeAllViews();
     }
 
     //this is disgusting but idk if there is a better way

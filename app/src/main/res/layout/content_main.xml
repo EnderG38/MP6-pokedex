@@ -40,68 +40,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pokemon_search_box">
 
-            <include
-                android:id="@+id/pokemon_pikachu"
-                layout="@layout/pokemon_search_item"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                tools:layout_editor_absoluteY="431dp" />
-
-            <include
-                android:id="@+id/pokemon_pikachu"
-                layout="@layout/pokemon_search_item"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                tools:layout_editor_absoluteY="431dp" />
-
-            <include
-                android:id="@+id/pokemon_pikachu"
-                layout="@layout/pokemon_search_item"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                tools:layout_editor_absoluteY="431dp" />
-
-            <include
-                android:id="@+id/pokemon_pikachu"
-                layout="@layout/pokemon_search_item"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                tools:layout_editor_absoluteY="431dp" />
-
-            <include
-                android:id="@+id/pokemon_pikachu"
-                layout="@layout/pokemon_search_item"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                tools:layout_editor_absoluteY="431dp" />
-
-            <include
-                android:id="@+id/pokemon_pikachu"
-                layout="@layout/pokemon_search_item"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                tools:layout_editor_absoluteY="431dp" />
-
-            <include
-                android:id="@+id/pokemon_pikachu"
-                layout="@layout/pokemon_search_item"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                tools:layout_editor_absoluteY="431dp" />
-
-            <include
-                android:id="@+id/pokemon_pikachu"
-                layout="@layout/pokemon_search_item"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                tools:layout_editor_absoluteY="431dp" />
-
-            <include
-                android:id="@+id/pokemon_pikachu"
-                layout="@layout/pokemon_search_item"
-                android:layout_width="match_parent"
-                android:layout_height="80dp" />
-
         </LinearLayout>
     </ScrollView>
 
