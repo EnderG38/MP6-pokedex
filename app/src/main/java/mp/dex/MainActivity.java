@@ -1,11 +1,11 @@
 package mp.dex;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final EditText searchbar = findViewById(R.id.pokemon_search_box);
         searchbar.setVisibility(View.GONE);
 
+        final InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+
         //TODO: make search work, then add this. or maybe just make search bar hiding work
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -68,9 +71,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         //.setAction("Action", null).show();
                 if (searchbar.getVisibility() == View.GONE) {
                     searchbar.setVisibility(View.VISIBLE);
+                    searchbar.requestFocus();
+                    inputMethodManager.showSoftInput(searchbar, InputMethodManager.SHOW_IMPLICIT);
                     fab.setImageResource(R.drawable.ic_baseline_clear_24px);
                 } else {
                     searchbar.setVisibility(View.GONE);
+                    searchbar.clearFocus();
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
                     fab.setImageResource(R.drawable.ic_baseline_search_24px);
                 }
             }
