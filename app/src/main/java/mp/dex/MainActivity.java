@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return st;
     }
 
-    //TODO: replace Pikachu info with placeholder/default values
+    //TODO: remove hardcoded pikachu info
     private void updatePokemon() {
         //the king is dead
         searchList.removeAllViews();
