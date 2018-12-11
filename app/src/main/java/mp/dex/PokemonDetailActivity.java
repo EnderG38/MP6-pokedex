@@ -30,7 +30,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
         getPokemonData(id);
     }
-
+    //This method gets the JSONObject for the Pokemon that was tapped on
+    //There *shouldn't* be any reason to modify getPokemonData at all
     private void getPokemonData(final int id) {
         try {
             String url = URL_BASE + urlPath + id + "/";
@@ -55,8 +56,15 @@ public class PokemonDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    //TODO Change title, as well as populate page with necessary Pokemon info
+    //TODO : Populate page with necessary Pokemon info
+    //TODO : (i.e. name, moves, base stats, image/sprite, dex entry? are probably good for presentation)
+    //The try/catch is to ensure the JSONObject isn't null
+    //You can probably drop all your changes in the /try/
     private void fillView(final JSONObject pokemon) {
-
+        try {
+            setTitle(MainActivity.formatString(pokemon.getString("name")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

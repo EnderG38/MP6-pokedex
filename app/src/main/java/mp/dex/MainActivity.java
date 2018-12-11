@@ -189,15 +189,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             parts[i] = parts[i].substring(0, 1).toUpperCase()
                         + parts[i].substring(1, parts[i].length());
         }
+        //Ignore the red text here; the formatting works as intended
         return String.join(" ", Arrays.asList(parts));
     }
-
-    //TODO: remove hardcoded pikachu info
+    //Empties the main content of elements,
+    //then makes a call to the URL request method that does the element re-population
     private void updatePokemon() {
         searchList.removeAllViews();
         retrieveData(String.valueOf(FIRST_ID));
     }
     //This takes the place of one iteration of the loop in the previous build
+    //TODO : populate the list with Pokemon's respective type symbols
     private void hydratePokemon(final JSONObject pokemon) {
         String pokemonName = null;
         int id = 0;
@@ -232,7 +234,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSprite.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
 
         TextView setDexNumber = new TextView(this);
-        setDexNumber.setText("#" + id);
+        String textId = "#" + id;
+        setDexNumber.setText(textId);
         setDexNumber.setPadding(10, 0, 10, 0);
 
         TextView setName = new TextView(this);
@@ -245,7 +248,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         searchList.addView(constraintLayout);
     }
-
+    //Unlikely that we'll get these up and running since the retrieveData method currently only works
+    //for Pokemon, though it's possible to have a .equals on the urlPath
     private void updateAbilities() {
         searchList.removeAllViews();
     }
