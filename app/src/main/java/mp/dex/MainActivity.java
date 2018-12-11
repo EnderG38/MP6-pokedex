@@ -40,6 +40,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -48,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String URL_SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
     private LinearLayout searchList;
-    private static JSONObject searchData;
     private static RequestQueue requestQueue;
 
     private static final int POKEMON_MODE = 0;
@@ -191,84 +192,66 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     //Method to convert Json strings to usable UI elements
     public static String formatString(String str) {
-        // Create a char array of given String
-        str = str.replace('-', ' ');
-        char ch[] = str.toCharArray();
-        for (int i = 0; i < str.length(); i++) {
-            // If first character of a word is found
-            if (i == 0 && ch[i] != ' ' ||
-                    ch[i] != ' ' && ch[i - 1] == ' ') {
-                // If it is in lower-case
-                if (ch[i] >= 'a' && ch[i] <= 'z') {
-                    // Convert into Upper-case
-                    ch[i] = (char)(ch[i] - 'a' + 'A');
-                }
-            }
-            // If apart from first character
-            // Any one is in Upper-case
-            else if (ch[i] >= 'A' && ch[i] <= 'Z')
-                // Convert into Lower-Case
-                ch[i] = (char)(ch[i] + 'a' - 'A');
+        String[] parts = str.split("-");
+        for(int i = 0; i < parts.length; i++) {
+            parts[i] = parts[i].substring(0, 1).toUpperCase()
+                        + parts[i].substring(1, parts[i].length());
         }
-        // Convert the char array to equivalent String
-        String st = new String(ch);
-        return st;
+        return String.join(" ", Arrays.asList(parts));
     }
-
-    private static String pokemonName;
 
     //TODO: remove hardcoded pikachu info
     private void updatePokemon() {
-        //the king is dead
         searchList.removeAllViews();
-        //long live the king
+        retrieveData(String.valueOf(FIRST_ID));
+    }
 
-        for (int i = FIRST_ID; i <= 10; i++) {
-            //new everything is required because using existing layouts/etc makes Android unhappy
-            //basically you can't add something to a view if it already has a parent
-            //and the existing things all had the LinearLayout as a parent
-            //so basically we need to make the search item layout from scratch. programmatically. fun.
-            ConstraintLayout constraintLayout = new ConstraintLayout(this);
-            LinearLayout pokemonList = new LinearLayout(this);
-            pokemonList.setGravity(Gravity.CENTER_VERTICAL);
-            pokemonList.setClickable(true);
-            constraintLayout.addView(pokemonList);
-
-            //here's the actual JSON stuff
-            //TODO: make the JSON stuff actually work
-            String pokemonName = "name";
-            final String id = String.valueOf(i);
-            try {
-                retrieveData(id);
-                pokemonName = formatString(searchData.getString("name"));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            //Exceptions for the 5 Pokemon with hyphens in their name.
-            if (i == 250 || i == 474 || i == 782 || i == 783 || i == 784) {
-                pokemonName = pokemonName.replace(' ', '-');
-            }
-
-            //these beautiful blocks of code set the layout and constraints
-            //It's a lot but damn is this cool
-            ImageView setSprite = new ImageView(this);
-            Picasso.get().load(URL_SPRITE_BASE + i + ".png").into(setSprite);
-            setSprite.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
-
-            TextView setDexNumber = new TextView(this);
-            setDexNumber.setText("#" + i);
-            setDexNumber.setPadding(10, 0, 10, 0);
-
-            TextView setName = new TextView(this);
-            setName.setText(pokemonName);
-            setName.setPadding(15, 0, 15, 0);
-
-            pokemonList.addView(setSprite);
-            pokemonList.addView(setDexNumber);
-            pokemonList.addView(setName);
-
-            searchList.addView(constraintLayout);
+    private void hydratePokemon(final JSONObject pokemon) {
+        String pokemonName = null;
+        int id = 0;
+        try {
+            pokemonName = formatString(pokemon.getString("name"));
+            id = pokemon.getInt("id");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        //Exceptions for the 5 Pokemon with hyphens in their name.
+        if (id == 250 || id == 474 || id == 782 || id == 783 || id == 784) {
+            pokemonName = pokemonName.replace(' ', '-');
+        }
+        final int detailsId = id;
+        ConstraintLayout constraintLayout = new ConstraintLayout(this);
+        LinearLayout pokemonList = new LinearLayout(this);
+        pokemonList.setGravity(Gravity.CENTER_VERTICAL);
+        pokemonList.setClickable(true);
+        pokemonList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                //Navigate to Pokemon Detail Page
+                Intent intent = new Intent(MainActivity.this, PokemonDetailActivity.class);
+                intent.putExtra("pokemonId", detailsId);
+                startActivity(intent);
+            }
+        });
+        constraintLayout.addView(pokemonList);
+
+        ImageView setSprite = new ImageView(this);
+        Picasso.get().load(URL_SPRITE_BASE + id + ".png").into(setSprite);
+        setSprite.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
+
+        TextView setDexNumber = new TextView(this);
+        setDexNumber.setText("#" + id);
+        setDexNumber.setPadding(10, 0, 10, 0);
+
+        TextView setName = new TextView(this);
+        setName.setText(pokemonName);
+        setName.setPadding(15, 0, 15, 0);
+
+        pokemonList.addView(setSprite);
+        pokemonList.addView(setDexNumber);
+        pokemonList.addView(setName);
+
+        searchList.addView(constraintLayout);
     }
 
     private void updateAbilities() {
@@ -280,8 +263,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //it does need to be on a separate thread
-    private static void retrieveData(final String id) {
-        //Request appears to not be happening at all
+    private void retrieveData(final String id) {
         try {
             String url = URL_BASE + urlAppendage + id + "/";
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -291,7 +273,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(final JSONObject response) {
-                            searchData = response;
+                            hydratePokemon(response);
+                            int nextId = 0;
+                            try {
+                                nextId = response.getInt("id") + 1;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            if (nextId <= LAST_ID) {
+                                retrieveData(String.valueOf(nextId));
+                            }
                             Log.d("Received JSON for id", id);
                         }
                     }, new Response.ErrorListener() {
@@ -307,14 +298,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void onClick(View v) {
-        final int id = v.getId();
-        switch(id) {
-            case R.id.pokemon_search_item:
-                //Navigate to Pokemon Detail Page
-                Intent intent = new Intent(MainActivity.this, PokemonDetailActivity.class);
-                startActivity(intent);
-                break;
-        }
+    public void onClick(int id) {
+        //Navigate to Pokemon Detail Page
     }
 }
