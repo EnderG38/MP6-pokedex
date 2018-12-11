@@ -16,18 +16,15 @@ import org.json.JSONObject;
 public class PokemonDetailActivity extends AppCompatActivity {
 
     private static RequestQueue requestQueue;
-    private final int id;
+    private int id;
     private static String urlPath = "pokemon/";
     private static final String URL_BASE = "https://pokeapi.co/api/v2/";
     private static final String URL_SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
-    PokemonDetailActivity() {
-        id = getIntent().getIntExtra("pokemonId", 0);
-    }
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pokemon_detail_page);
+        id = getIntent().getIntExtra("pokemonId", 0);
 
         requestQueue = Volley.newRequestQueue(this);
 

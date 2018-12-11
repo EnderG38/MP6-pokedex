@@ -289,8 +289,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
     }
-
-    public void onClick(int id) {
-        //Navigate to Pokemon Detail Page
-    }
 }
