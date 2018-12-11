@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -189,8 +190,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             parts[i] = parts[i].substring(0, 1).toUpperCase()
                         + parts[i].substring(1, parts[i].length());
         }
-        //Ignore the red text here; the formatting works as intended
-        return String.join(" ", Arrays.asList(parts));
+        //This is now compatible with Android Marshmallow and up
+        return TextUtils.join(" ", Arrays.asList(parts));
     }
     //Empties the main content of elements,
     //then makes a call to the URL request method that does the element re-population

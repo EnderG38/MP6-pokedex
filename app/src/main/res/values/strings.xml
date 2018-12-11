@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">What-A-Dex</string>
+    <string name="app_name">Dex</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">What-A-Dex</string>
+    <string name="nav_header_title">@string/app_name</string>
     <string name="nav_header_subtitle">The better Pokedex</string>
     <string name="nav_header_desc">Navigation header</string>
 
