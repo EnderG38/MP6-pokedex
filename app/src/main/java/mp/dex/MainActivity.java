@@ -1,10 +1,12 @@
 package mp.dex;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.FloatingActionButton;
@@ -32,8 +34,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.squareup.picasso.Picasso;
+
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -144,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //handles selecting options in navigation panel
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch(id) {
             case R.id.nav_pokemon:
@@ -172,12 +180,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
             case ABILITY_MODE: {
-                urlPath = "abilities/";
+                urlPath = "ability/";
                 updateAbilities();
                 break;
             }
             case MOVE_MODE: {
-                urlPath = "moves/";
+                urlPath = "move/";
                 updateMoves();
                 break;
             }
@@ -197,6 +205,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //then makes a call to the URL request method that does the element re-population
     private void updatePokemon() {
         searchList.removeAllViews();
+        /*Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (!thread.isInterrupted()) {
+                    try {
+                        retrieveData(String.valueOf(FIRST_ID));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        thread.start();*/
         retrieveData(String.valueOf(FIRST_ID));
     }
     //This takes the place of one iteration of the loop in the previous build
@@ -214,7 +235,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == 250 || id == 474 || id == 782 || id == 783 || id == 784) {
             pokemonName = pokemonName.replace(' ', '-');
         }
-
         final int detailsId = id;
         ConstraintLayout constraintLayout = new ConstraintLayout(this);
         ConstraintSet constraintSet = new ConstraintSet();
@@ -227,8 +247,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int[] attrs = new int[]{R.attr.selectableItemBackground};
         TypedArray typedArray = obtainStyledAttributes(attrs);
         int backgroundResource = typedArray.getResourceId(0, 0);
+        typedArray.recycle();
         constraintLayout.setBackgroundResource(backgroundResource);
-
         constraintLayout.setClickable(true);
 
         constraintLayout.addView(pokemonList);
@@ -236,6 +256,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LinearLayout types = new LinearLayout(this);
         types.setOrientation(LinearLayout.VERTICAL);
         types.setGravity(Gravity.CENTER);
+        try {
+            JSONArray typeArray = pokemon.getJSONArray("types");
+            for (int i = 0; i < typeArray.length(); i++) {
+                ImageView iv = new ImageView(this);
+                String type = typeArray.getJSONObject(i).getJSONObject("type").getString("name");
+                //Picasso.get().load(getCacheDir() + "/type_" + type + ".png").into(iv);
+                iv.setImageDrawable(Drawable.createFromPath("/type_" + type + ".png"));
+                types.addView(iv);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         final ImageView setSprite = new ImageView(this);
         Picasso.get().load(URL_SPRITE_BASE + id + ".png").into(setSprite);
@@ -253,9 +285,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pokemonList.addView(setSprite);
         pokemonList.addView(setDexNumber);
         pokemonList.addView(setName);
+        pokemonList.addView(types);
 
         constraintSet.clone(constraintLayout);
-        constraintSet.connect(types.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.START, 20);
+        //constraintSet.connect(types.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.START, 4);
 
         constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,44 +315,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //TODO: modify for compatibility with moves/abilities/items/etc
     //Filling the list occurs concurrently with making the web request
     private void retrieveData(final String id) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String url = URL_BASE + urlPath + id + "/";
-                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                            Request.Method.GET,
-                            url,
-                            null,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(final JSONObject response) {
-                                    hydratePokemon(response);
-                                    int nextId = 0;
-                                    try {
-                                        nextId = response.getInt("id") + 1;
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                    if (nextId <= LAST_ID) {
-                                        retrieveData(String.valueOf(nextId));
-                                    }
-                                    Log.d("Received JSON for id", id);
-                                }
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(final VolleyError error) {
-                            error.printStackTrace();
+        String url = URL_BASE + urlPath + id + "/";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(final JSONObject response) {
+                        hydratePokemon(response);
+                        int nextId = 0;
+                        try {
+                            nextId = response.getInt("id") + 1;
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
+                        if (nextId <= LAST_ID) {
+                            retrieveData(String.valueOf(nextId));
+                        }
+                        Log.d("Received JSON for id", id);
                     }
-                    );
-                    requestQueue.add(jsonObjectRequest);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError error) {
+                error.printStackTrace();
             }
-        });
-        thread.setName("Network Request");
-        thread.start();
+        }
+        );
+        requestQueue.add(jsonObjectRequest);
     }
 }

@@ -32,7 +32,9 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
         ConstraintLayout constraintLayout = findViewById(R.id.pokemon_detail_layout);
         ImageView setSprite = new ImageView(this);
-        Picasso.get().load(URL_SPRITE_BASE + id + ".png").resize(350, 350).into(setSprite);
+        int w, h;
+        w = h = Util.dpToPx(150, this);
+        Picasso.get().load(URL_SPRITE_BASE + id + ".png").resize(w, h).into(setSprite);
         constraintLayout.addView(setSprite);
 
         requestQueue = Volley.newRequestQueue(this);
