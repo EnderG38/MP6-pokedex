@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         searchList.removeAllViews();
         retrieveData(String.valueOf(FIRST_ID));
     }
-
+    //This takes the place of one iteration of the loop in the previous build
     private void hydratePokemon(final JSONObject pokemon) {
         String pokemonName = null;
         int id = 0;
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         searchList.removeAllViews();
     }
 
-    //it does need to be on a separate thread
+    //Filling the list occurs concurrently with making the web request
     private void retrieveData(final String id) {
         try {
             String url = URL_BASE + urlPath + id + "/";
