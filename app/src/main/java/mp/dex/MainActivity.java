@@ -29,23 +29,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static String urlAppendage = "pokemon/";
+    private static String urlPath = "pokemon/";
     private static final String URL_BASE = "https://pokeapi.co/api/v2/";
     private static final String URL_SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
@@ -174,17 +166,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void changeMode(int m) {
         switch (m) {
             case POKEMON_MODE: {
-                urlAppendage = "pokemon/";
+                urlPath = "pokemon/";
                 updatePokemon();
                 break;
             }
             case ABILITY_MODE: {
-                urlAppendage = "abilities/";
+                urlPath = "abilities/";
                 updateAbilities();
                 break;
             }
             case MOVE_MODE: {
-                urlAppendage = "moves/";
+                urlPath = "moves/";
                 updateMoves();
                 break;
             }
@@ -265,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //it does need to be on a separate thread
     private void retrieveData(final String id) {
         try {
-            String url = URL_BASE + urlAppendage + id + "/";
+            String url = URL_BASE + urlPath + id + "/";
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                     Request.Method.GET,
                     url,
