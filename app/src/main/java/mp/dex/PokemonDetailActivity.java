@@ -1,8 +1,11 @@
 package mp.dex;
 
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -10,6 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -26,8 +30,12 @@ public class PokemonDetailActivity extends AppCompatActivity {
         setContentView(R.layout.pokemon_detail_page);
         id = getIntent().getIntExtra("pokemonId", 0);
 
-        requestQueue = Volley.newRequestQueue(this);
+        ConstraintLayout constraintLayout = findViewById(R.id.pokemon_detail_layout);
+        ImageView setSprite = new ImageView(this);
+        Picasso.get().load(URL_SPRITE_BASE + id + ".png").resize(350, 350).into(setSprite);
+        constraintLayout.addView(setSprite);
 
+        requestQueue = Volley.newRequestQueue(this);
         getPokemonData(id);
     }
     //This method gets the JSONObject for the Pokemon that was tapped on
@@ -62,7 +70,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
     //You can probably drop all your changes in the /try/
     private void fillView(final JSONObject pokemon) {
         try {
-            setTitle(MainActivity.formatString(pokemon.getString("name")));
+            setTitle(" #" + id + ": " + MainActivity.formatString(pokemon.getString("name")));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -33,10 +33,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
-
 import org.json.JSONObject;
-
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -67,10 +64,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final EditText searchbar = findViewById(R.id.pokemon_search_box);
         searchbar.setVisibility(View.GONE);
 
-        /*final InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        //final InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         //TODO: make search work, then add this. or maybe just make search bar hiding work
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab.hide();
+        /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Snackbar.make(view, "This will eventually be a search button", Snackbar.LENGTH_LONG)
@@ -232,22 +230,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         constraintLayout.setBackgroundResource(backgroundResource);
 
         constraintLayout.setClickable(true);
-        constraintLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                //Navigate to Pokemon Detail Page
-                Intent intent = new Intent(MainActivity.this, PokemonDetailActivity.class);
-                intent.putExtra("pokemonId", detailsId);
-                startActivity(intent);
-            }
-        });
+
         constraintLayout.addView(pokemonList);
 
         LinearLayout types = new LinearLayout(this);
         types.setOrientation(LinearLayout.VERTICAL);
         types.setGravity(Gravity.CENTER);
 
-        ImageView setSprite = new ImageView(this);
+        final ImageView setSprite = new ImageView(this);
         Picasso.get().load(URL_SPRITE_BASE + id + ".png").into(setSprite);
         setSprite.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
 
@@ -267,6 +257,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         constraintSet.clone(constraintLayout);
         constraintSet.connect(types.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.START, 20);
 
+        constraintLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                //Navigate to Pokemon Detail Page
+                Intent intent = new Intent(MainActivity.this, PokemonDetailActivity.class);
+                intent.putExtra("pokemonId", detailsId);
+                startActivity(intent);
+            }
+        });
+
         searchList.addView(constraintLayout);
     }
     //Unlikely that we'll get these up and running since the retrieveData method currently only works
@@ -279,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         searchList.removeAllViews();
     }
 
+    //TODO: modify for compatibility with moves/abilities/items/etc
     //Filling the list occurs concurrently with making the web request
     private void retrieveData(final String id) {
         Thread thread = new Thread(new Runnable() {
