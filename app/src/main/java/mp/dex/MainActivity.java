@@ -329,17 +329,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(final JSONObject response) {
-                        hydratePokemon(response);
-                        int nextId = 0;
-                        try {
-                            nextId = response.getInt("id") + 1;
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        if (urlPath.equals("pokemon/")) {
+                            hydratePokemon(response);
+                            int nextId = 0;
+                            try {
+                                nextId = response.getInt("id") + 1;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            if (nextId <= LAST_ID) {
+                                retrieveData(String.valueOf(nextId));
+                            }
+                            Log.d("Received JSON for id", id);
                         }
-                        if (nextId <= LAST_ID) {
-                            retrieveData(String.valueOf(nextId));
-                        }
-                        Log.d("Received JSON for id", id);
                     }
                 }, new Response.ErrorListener() {
             @Override
