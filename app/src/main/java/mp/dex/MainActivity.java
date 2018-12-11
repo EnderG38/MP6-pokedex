@@ -41,7 +41,9 @@ import org.json.JSONObject;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -262,7 +264,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ImageView iv = new ImageView(this);
                 String type = typeArray.getJSONObject(i).getJSONObject("type").getString("name");
                 //Picasso.get().load(getCacheDir() + "/type_" + type + ".png").into(iv);
-                iv.setImageDrawable(Drawable.createFromPath("/type_" + type + ".png"));
+                iv.setImageResource(R.drawable.type_null);
+                iv.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPx(40, this), Util.dpToPx(20, this)));
                 types.addView(iv);
             }
         } catch (JSONException e) {
@@ -287,8 +290,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pokemonList.addView(setName);
         pokemonList.addView(types);
 
-        constraintSet.clone(constraintLayout);
-        //constraintSet.connect(types.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.START, 4);
+        /*constraintSet.clone(constraintLayout);
+        constraintSet.connect(pokemonList.getId(), ConstraintSet.BASELINE, constraintLayout.getId(), ConstraintSet.BASELINE);
+        constraintSet.constrainDefaultWidth(pokemonList.getId(), ConstraintSet.CHAIN_SPREAD);
+        constraintSet.connect(types.getId(), ConstraintSet.END, pokemonList.getId(), ConstraintSet.START, 4);
+        constraintSet.applyTo(constraintLayout);*/
 
         constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
