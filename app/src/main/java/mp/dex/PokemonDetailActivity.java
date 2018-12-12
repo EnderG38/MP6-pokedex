@@ -59,8 +59,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    //TODO : Populate page with necessary Pokemon info
-    //TODO : (i.e. name, moves, base stats, image/sprite, dex entry? are probably good for presentation)
+    //TODO: add moves eventually?
     //The try/catch is to ensure the JSONObject isn't null
     //You can probably drop all your changes in the /try/
     private void fillView(final JSONObject pokemon) {

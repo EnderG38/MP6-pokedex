@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     protected static boolean backToOpenNavDrawer = false;
 
-    //TODO: IMPORTANT: add cache and
+    //TODO: IMPORTANT: add cache and connection checking before full release
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
