@@ -21,7 +21,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
     private static RequestQueue requestQueue;
     private int id;
-    private static String urlPath = "pokemon/";
     private static final String URL_BASE = "https://pokeapi.co/api/v2/";
     private static final String URL_SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
@@ -37,6 +36,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
     //There *shouldn't* be any reason to modify getPokemonData at all
     private void getPokemonData(final int id) {
         try {
+            String urlPath = "pokemon/";
             String url = URL_BASE + urlPath + id + "/";
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                     Request.Method.GET,
@@ -82,6 +82,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
             TextView baseSpecialAttack = findViewById(R.id.special_attack_value);
             TextView baseSpecialDefense = findViewById(R.id.special_defense_value);
             TextView baseSpeed = findViewById(R.id.speed_value);
+            TextView[] stats = {baseSpeed, baseSpecialDefense, baseSpecialAttack, baseDefense, baseAttack, baseHP};
+            TextView baseStatTotal = findViewById(R.id.total_value);
 
             setTitle(pkmnName);
 
@@ -92,23 +94,34 @@ public class PokemonDetailActivity extends AppCompatActivity {
             String tmp;
             tmp = (String) heightText.getText();
             tmp = tmp.replace("x", "" + height / 10).replace("y", "" + Util.dmToFtAndIn(height));
-            System.out.println(tmp);
             heightText.setText(tmp);
             tmp = (String) weightText.getText();
             tmp = tmp.replace("x", ("" + weight / 10)).replace("y", "" + Util.hgToLb(weight));
             weightText.setText(tmp);
 
-            JSONArray typeArray = pokemon.getJSONArray("types");
-            for (int i = typeArray.length() - 1; i >= 0; i--) {
+            JSONArray jsonArray = pokemon.getJSONArray("types");
+            for (int i = jsonArray.length() - 1; i >= 0; i--) {
                 ImageView iv = new ImageView(this);
-                String type = typeArray.getJSONObject(i).getJSONObject("type").getString("name");
+                String type = jsonArray.getJSONObject(i).getJSONObject("type").getString("name");
                 iv.setImageResource(Util.getDrawable("type_" + type, this));
                 iv.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPx(60, this), Util.dpToPx(30, this)));
                 types.addView(iv);
             }
 
-            number.setText("#" + id);
+            tmp = "#" + id;
+            number.setText(tmp);
             name.setText(pkmnName);
+
+            jsonArray = pokemon.getJSONArray("stats");
+            int bst = 0;
+            for (int i = 0; i < jsonArray.length(); i++) {
+                int st = jsonArray.getJSONObject(i).getInt("base_stat");
+                bst += st;
+                tmp = String.valueOf(st);
+                stats[i].setText(tmp);
+            }
+            tmp = String.valueOf(bst);
+            baseStatTotal.setText(tmp);
 
         } catch (Exception e) {
             e.printStackTrace();

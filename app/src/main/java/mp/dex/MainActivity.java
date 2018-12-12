@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //handles selecting options in navigation panel
+    //TODO: disable moves and abilities/ throw a snackbar when tapped instead of changing mode
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -216,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         retrieveData(String.valueOf(FIRST_ID));
     }
     //This takes the place of one iteration of the loop in the previous build
-    //TODO : populate the list with Pokemon's respective type symbols
     private void hydratePokemon(final JSONObject pokemon) {
         String pokemonName = null;
         int id = 0;
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TypedArray typedArray = obtainStyledAttributes(attrs);
         int backgroundResource = typedArray.getResourceId(0, 0);
         typedArray.recycle();
-        pokemonList.setBackgroundResource(backgroundResource);
+        constraintLayout.setBackgroundResource(backgroundResource);
         constraintLayout.setClickable(true);
         constraintLayout.addView(pokemonList);
 
@@ -277,13 +277,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setName.setText(pokemonName);
         setName.setPadding(15, 0, 15, 0);
 
-        View buffer = new View(this);
-        buffer.setMinimumWidth(1);
-
         pokemonList.addView(setSprite);
         pokemonList.addView(setDexNumber);
         pokemonList.addView(setName);
-        //pokemonList.addView(buffer);
         pokemonList.addView(types);
 
         constraintLayout.setOnClickListener(new View.OnClickListener() {
