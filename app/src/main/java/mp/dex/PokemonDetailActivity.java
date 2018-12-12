@@ -1,9 +1,7 @@
 package mp.dex;
 
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -67,18 +65,38 @@ public class PokemonDetailActivity extends AppCompatActivity {
     //You can probably drop all your changes in the /try/
     private void fillView(final JSONObject pokemon) {
         try {
-            setTitle(MainActivity.formatString(pokemon.getString("name")));
+            String pkmnName = MainActivity.formatString(pokemon.getString("name"));
 
             ImageView setSprite = findViewById(R.id.sprite);
-            TextView height = findViewById(R.id.height);
-            TextView weight = findViewById(R.id.weight);
-            TextView number = findViewById(R.id.id);
-            TextView name = findViewById(R.id.name);
-            LinearLayout types = findViewById(R.id.types_detail);
+            TextView heightText = findViewById(R.id.height);
+            double height = pokemon.getInt("height");
+            TextView weightText = findViewById(R.id.weight);
+            double weight = pokemon.getInt("weight");
+            LinearLayout types = findViewById(R.id.detail_types);
+            TextView number = findViewById(R.id.detail_id);
+            TextView name = findViewById(R.id.detail_name);
+
+            TextView baseHP = findViewById(R.id.hp_value);
+            TextView baseAttack = findViewById(R.id.attack_value);
+            TextView baseDefense = findViewById(R.id.defense_value);
+            TextView baseSpecialAttack = findViewById(R.id.special_attack_value);
+            TextView baseSpecialDefense = findViewById(R.id.special_defense_value);
+            TextView baseSpeed = findViewById(R.id.speed_value);
+
+            setTitle(pkmnName);
 
             int w, h;
             w = h = Util.dpToPx(150, this);
             Picasso.get().load(URL_SPRITE_BASE + id + ".png").resize(w, h).into(setSprite);
+
+            String tmp;
+            tmp = (String) heightText.getText();
+            tmp = tmp.replace("x", "" + height / 10).replace("y", "" + Util.dmtoFtAndIn(height));
+            System.out.println(tmp);
+            heightText.setText(tmp);
+            tmp = (String) weightText.getText();
+            tmp = tmp.replace("x", ("" + weight / 10)).replace("y", "" + Util.hgToLb(weight));
+            weightText.setText(tmp);
 
             JSONArray typeArray = pokemon.getJSONArray("types");
             for (int i = typeArray.length() - 1; i >= 0; i--) {
@@ -88,6 +106,10 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 iv.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPx(60, this), Util.dpToPx(30, this)));
                 types.addView(iv);
             }
+
+            number.setText("#" + id);
+            name.setText(pkmnName);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

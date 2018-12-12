@@ -65,7 +65,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/types_detail"
+                    android:id="@+id/detail_types"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right|center_horizontal"
@@ -83,7 +83,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/id"
+                    android:id="@+id/detail_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="12dp"
@@ -94,7 +94,7 @@
                     android:textSize="30sp" />
 
                 <TextView
-                    android:id="@+id/name"
+                    android:id="@+id/detail_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
