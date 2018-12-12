@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,6 +16,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class PokemonDetailActivity extends AppCompatActivity {
@@ -29,13 +31,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pokemon_detail_page);
         id = getIntent().getIntExtra("pokemonId", 0);
-
-        ConstraintLayout constraintLayout = findViewById(R.id.pokemon_detail_layout);
-        ImageView setSprite = new ImageView(this);
-        int w, h;
-        w = h = Util.dpToPx(150, this);
-        Picasso.get().load(URL_SPRITE_BASE + id + ".png").resize(w, h).into(setSprite);
-        constraintLayout.addView(setSprite);
 
         requestQueue = Volley.newRequestQueue(this);
         getPokemonData(id);
@@ -72,7 +67,27 @@ public class PokemonDetailActivity extends AppCompatActivity {
     //You can probably drop all your changes in the /try/
     private void fillView(final JSONObject pokemon) {
         try {
-            setTitle(" #" + id + ": " + MainActivity.formatString(pokemon.getString("name")));
+            setTitle(MainActivity.formatString(pokemon.getString("name")));
+
+            ImageView setSprite = findViewById(R.id.sprite);
+            TextView height = findViewById(R.id.height);
+            TextView weight = findViewById(R.id.weight);
+            TextView number = findViewById(R.id.id);
+            TextView name = findViewById(R.id.name);
+            LinearLayout types = findViewById(R.id.types_detail);
+
+            int w, h;
+            w = h = Util.dpToPx(150, this);
+            Picasso.get().load(URL_SPRITE_BASE + id + ".png").resize(w, h).into(setSprite);
+
+            JSONArray typeArray = pokemon.getJSONArray("types");
+            for (int i = typeArray.length() - 1; i >= 0; i--) {
+                ImageView iv = new ImageView(this);
+                String type = typeArray.getJSONObject(i).getJSONObject("type").getString("name");
+                iv.setImageResource(Util.getDrawable("type_" + type, this));
+                iv.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPx(60, this), Util.dpToPx(30, this)));
+                types.addView(iv);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

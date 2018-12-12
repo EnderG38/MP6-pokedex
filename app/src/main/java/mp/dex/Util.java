@@ -10,4 +10,16 @@ public class Util {
                 .density;
         return Math.round((float) dp * density);
     }
+
+    public static int dmToIn(double dm) {
+        return (int) Math.round(dm * 3.93701);
+    }
+
+    public static double hgToLb(double hg) {
+        return Math.round(hg * 0.220462 * 10d) / 10d;
+    }
+
+    public static int getDrawable(String id, Context context) {
+        return context.getResources().getIdentifier(id, "drawable", context.getPackageName());
+    }
 }

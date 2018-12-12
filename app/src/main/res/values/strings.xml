@@ -12,6 +12,8 @@
     <string name="back_opens_nav">Back button opens navigation drawer</string>
     <string name="about_link">About</string>
 
+    <string name="BST_title">Base Stats:</string>
+
     <string name="about_text">This app is not affiliated with, endorsed by, or supported in any way
         by Nintendo, GAME FREAK, or Creatures, Inc. Some images and text used in this app are
         copyrighted and are supported under fair use. Pokémon and Pokémon character names are

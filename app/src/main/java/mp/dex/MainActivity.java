@@ -3,8 +3,6 @@ package mp.dex;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -22,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,10 +37,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.squareup.picasso.Picasso;
-
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -250,21 +243,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TypedArray typedArray = obtainStyledAttributes(attrs);
         int backgroundResource = typedArray.getResourceId(0, 0);
         typedArray.recycle();
-        constraintLayout.setBackgroundResource(backgroundResource);
+        pokemonList.setBackgroundResource(backgroundResource);
         constraintLayout.setClickable(true);
-
         constraintLayout.addView(pokemonList);
 
         LinearLayout types = new LinearLayout(this);
         types.setOrientation(LinearLayout.VERTICAL);
-        types.setGravity(Gravity.CENTER);
+        types.setGravity(Gravity.CENTER_VERTICAL);
+        types.setHorizontalGravity(Gravity.END);
         try {
             JSONArray typeArray = pokemon.getJSONArray("types");
-            for (int i = 0; i < typeArray.length(); i++) {
+            for (int i = typeArray.length() - 1; i >= 0; i--) {
                 ImageView iv = new ImageView(this);
                 String type = typeArray.getJSONObject(i).getJSONObject("type").getString("name");
-                //Picasso.get().load(getCacheDir() + "/type_" + type + ".png").into(iv);
-                iv.setImageResource(R.drawable.type_null);
+                iv.setImageResource(Util.getDrawable("type_" + type, this));
                 iv.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPx(40, this), Util.dpToPx(20, this)));
                 types.addView(iv);
             }
@@ -285,16 +277,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setName.setText(pokemonName);
         setName.setPadding(15, 0, 15, 0);
 
+        View buffer = new View(this);
+        buffer.setMinimumWidth(1);
+
         pokemonList.addView(setSprite);
         pokemonList.addView(setDexNumber);
         pokemonList.addView(setName);
+        //pokemonList.addView(buffer);
         pokemonList.addView(types);
-
-        /*constraintSet.clone(constraintLayout);
-        constraintSet.connect(pokemonList.getId(), ConstraintSet.BASELINE, constraintLayout.getId(), ConstraintSet.BASELINE);
-        constraintSet.constrainDefaultWidth(pokemonList.getId(), ConstraintSet.CHAIN_SPREAD);
-        constraintSet.connect(types.getId(), ConstraintSet.END, pokemonList.getId(), ConstraintSet.START, 4);
-        constraintSet.applyTo(constraintLayout);*/
 
         constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
