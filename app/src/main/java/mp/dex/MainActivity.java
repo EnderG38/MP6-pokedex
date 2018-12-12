@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -76,8 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "This will eventually be a search button", Snackbar.LENGTH_LONG)
-                        //.setAction("Action", null).show();
+                //Snackbar.make(view, "This will eventually be a search button", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 if (searchbar.getVisibility() == View.GONE) {
                     searchbar.setVisibility(View.VISIBLE);
                     searchbar.requestFocus();
@@ -151,7 +151,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //TODO: disable moves and abilities/ throw a snackbar when tapped instead of changing mode
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
+        View view = findViewById(R.id.nav_view);
+        Snackbar.make(view, "Navigation is still under construction!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        /*int id = item.getItemId();
         switch(id) {
             case R.id.nav_pokemon:
                 changeMode(POKEMON_MODE);
@@ -162,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_moves:
                 changeMode(MOVE_MODE);
                 break;
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
