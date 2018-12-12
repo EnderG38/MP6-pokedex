@@ -91,7 +91,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             String tmp;
             tmp = (String) heightText.getText();
-            tmp = tmp.replace("x", "" + height / 10).replace("y", "" + Util.dmtoFtAndIn(height));
+            tmp = tmp.replace("x", "" + height / 10).replace("y", "" + Util.dmToFtAndIn(height));
             System.out.println(tmp);
             heightText.setText(tmp);
             tmp = (String) weightText.getText();

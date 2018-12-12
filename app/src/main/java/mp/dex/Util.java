@@ -15,7 +15,7 @@ public class Util {
         return (int) Math.round(dm * 3.93701);
     }
 
-    public static String dmtoFtAndIn(double dm) {
+    public static String dmToFtAndIn(double dm) {
         String str = "x' y\"";
         int in = dmToIn(dm);
         int ft = in / 12;
