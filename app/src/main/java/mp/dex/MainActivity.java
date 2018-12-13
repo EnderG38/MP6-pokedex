@@ -307,8 +307,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         searchList.addView(constraintLayout);
     }
-    //Unlikely that we'll get these up and running since the retrieveData method currently only works
-    //for Pokemon, though it's possible to have a .equals on the urlPath
+
+    private void hydrateAbility(final JSONObject ability) {
+
+    }
+
+    private void hydrateMove(final JSONObject move) {
+
+    }
 
     //TODO: modify for compatibility with moves/abilities/items/etc
     //Filling the list occurs concurrently with making the web request
@@ -334,7 +340,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                             Log.d("Received JSON for id", id);
                         } else if (urlPath.equals("ability/")) {
-                            /*
                             hydrateAbility(response);
                             int nextId = 0;
                             try {
@@ -346,9 +351,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 retrieveData(String.valueOf(nextId));
                             }
                             Log.d("Received JSON for id", id);
-                             */
                         } else if (urlPath.equals("move/")) {
-                            /*
                             hydrateMove(response);
                             int nextId = 0;
                             try {
@@ -360,7 +363,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 retrieveData(String.valueOf(nextId));
                             }
                             Log.d("Received JSON for id", id);
-                             */
                         }
                     }
                 }, new Response.ErrorListener() {
