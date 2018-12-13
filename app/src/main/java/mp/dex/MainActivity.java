@@ -152,8 +152,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         View view = findViewById(R.id.nav_view);
-        //Snackbar.make(view, "Navigation is still under construction!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-        int id = item.getItemId();
+        Snackbar.make(view, "Navigation is still under construction!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        /*int id = item.getItemId();
         switch(id) {
             case R.id.nav_pokemon:
                 changeMode(POKEMON_MODE);
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_moves:
                 changeMode(MOVE_MODE);
                 break;
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -340,6 +340,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                             Log.d("Received JSON for id", id);
                         } else if (urlPath.equals("ability/")) {
+                            /*
                             hydrateAbility(response);
                             int nextId = 0;
                             try {
@@ -351,7 +352,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 retrieveData(String.valueOf(nextId));
                             }
                             Log.d("Received JSON for id", id);
+                             */
                         } else if (urlPath.equals("move/")) {
+                            /*
                             hydrateMove(response);
                             int nextId = 0;
                             try {
@@ -363,6 +366,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 retrieveData(String.valueOf(nextId));
                             }
                             Log.d("Received JSON for id", id);
+                             */
                         }
                     }
                 }, new Response.ErrorListener() {
