@@ -51,10 +51,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int POKEMON_MODE = 0;
     private static final int MOVE_MODE = 1;
     private static final int ABILITY_MODE = 2;
-    private static final int FIRST_ID = 1;
-    private static final int LAST_ID = 802;
-    private static final int FIRST_ALTERNATE_ID = 10001;
-    private static final int LAST_ALTERNATE_ID = 10147;
+    private static int FIRST_ID = 1;
+    private static int LAST_ID = 802;
+    //private static final int FIRST_ALTERNATE_ID = 10001;
+    //private static final int LAST_ALTERNATE_ID = 10147;
 
     protected static boolean backToOpenNavDrawer = false;
 
@@ -152,8 +152,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         View view = findViewById(R.id.nav_view);
-        Snackbar.make(view, "Navigation is still under construction!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-        /*int id = item.getItemId();
+        //Snackbar.make(view, "Navigation is still under construction!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        int id = item.getItemId();
         switch(id) {
             case R.id.nav_pokemon:
                 changeMode(POKEMON_MODE);
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_moves:
                 changeMode(MOVE_MODE);
                 break;
-        }*/
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -204,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Empties the main content of elements,
     //then makes a call to the URL request method that does the element re-population
     private void updatePokemon() {
-        searchList.removeAllViews();
         /*Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -218,6 +217,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         thread.start();*/
+        LAST_ID = 802;
+        retrieveData(String.valueOf(FIRST_ID));
+    }
+    private void updateAbilities() {
+        LAST_ID = 232;
+        retrieveData(String.valueOf(FIRST_ID));
+    }
+
+    private void updateMoves() {
+        LAST_ID = 719;
         retrieveData(String.valueOf(FIRST_ID));
     }
     //This takes the place of one iteration of the loop in the previous build
@@ -300,13 +309,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     //Unlikely that we'll get these up and running since the retrieveData method currently only works
     //for Pokemon, though it's possible to have a .equals on the urlPath
-    private void updateAbilities() {
-        searchList.removeAllViews();
-    }
-
-    private void updateMoves() {
-        searchList.removeAllViews();
-    }
 
     //TODO: modify for compatibility with moves/abilities/items/etc
     //Filling the list occurs concurrently with making the web request
@@ -331,6 +333,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 retrieveData(String.valueOf(nextId));
                             }
                             Log.d("Received JSON for id", id);
+                        } else if (urlPath.equals("ability/")) {
+                            /*
+                            hydrateAbility(response);
+                            int nextId = 0;
+                            try {
+                                nextId = response.getInt("id") + 1;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            if (nextId <= LAST_ID) {
+                                retrieveData(String.valueOf(nextId));
+                            }
+                            Log.d("Received JSON for id", id);
+                             */
+                        } else if (urlPath.equals("move/")) {
+                            /*
+                            hydrateMove(response);
+                            int nextId = 0;
+                            try {
+                                nextId = response.getInt("id") + 1;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            if (nextId <= LAST_ID) {
+                                retrieveData(String.valueOf(nextId));
+                            }
+                            Log.d("Received JSON for id", id);
+                             */
                         }
                     }
                 }, new Response.ErrorListener() {
